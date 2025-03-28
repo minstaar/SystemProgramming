@@ -9,14 +9,15 @@
 #include "list.h"
 #include "round.h"
 
-int string_split(char *str, char argv[10][30]);
+int string_split(char *str, char argv[10][50]);
 
 int main()
 {
     int argc;
-    char input[110], argv[10][30] = {};
+    char input[110], argv[10][50] = {};
     struct list **main_list = (struct list **)calloc(15, sizeof(struct list *));
     struct hash **main_hash = (struct hash **)calloc(15, sizeof(struct hash *));
+    struct bitmap **main_bitmap = (struct bitmap **)calloc(15, sizeof(struct bitmap *));
 
     while (fgets(input, 110, stdin) != NULL)
     {
@@ -175,12 +176,109 @@ int main()
                 hash_replace(main_hash[atoi(argv[1] + 4)], new_elem(atoi(argv[2])));
             }
         }
+
+        else if (!strncmp(argv[0], "bitmap", 5) || !strncmp(argv[1], "bitmap", 5) || !strncmp(argv[1], "bm", 2))
+        {
+            if (!strcmp(argv[0], "create"))
+            {
+                main_bitmap[atoi(argv[2] + 2)] = bitmap_create((size_t)atoi(argv[3]));
+            }
+            else if (!strcmp(argv[0], "delete"))
+            {
+                bitmap_destroy(main_bitmap[atoi(argv[1] + 2)]);
+            }
+            else if (!strcmp(argv[0], "dumpdata"))
+            {
+                dumpdata_bitmap(main_bitmap, argv[1]);
+            }
+
+            else if(!strcmp(argv[0], "bitmap_size"))
+            {
+                printf("%zu\n", bitmap_size(main_bitmap[atoi(argv[1] + 2)]));
+            }
+            else if(!strcmp(argv[0], "bitmap_set"))
+            {
+                bitmap_set(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]), strcmp(argv[3], "false"));
+            }
+            else if(!strcmp(argv[0], "bitmap_mark"))
+            {
+                bitmap_mark(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]));
+            }
+            else if(!strcmp(argv[0], "bitmap_reset"))
+            {
+                bitmap_reset(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]));
+            }
+            else if(!strcmp(argv[0], "bitmap_flip"))
+            {
+                bitmap_flip(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]));
+            }
+            else if(!strcmp(argv[0], "bitmap_test"))
+            {
+                bool res = bitmap_test(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]));
+                printf("%s\n", res ? "true" : "false");
+            }
+            else if(!strcmp(argv[0], "bitmap_set_all"))
+            {
+                bitmap_set_all(main_bitmap[atoi(argv[1] + 2)], strcmp(argv[2], "false"));
+            }
+            else if(!strcmp(argv[0], "bitmap_set_multiple"))
+            {
+                bitmap_set_multiple(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]), (size_t)atoi(argv[3]), strcmp(argv[4], "false"));
+            }
+            else if(!strcmp(argv[0], "bitmap_count"))
+            {
+                size_t cnt = bitmap_count(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]), (size_t)atoi(argv[3]), strcmp(argv[4], "false"));
+                printf("%zu\n", cnt);
+            }
+            else if(!strcmp(argv[0], "bitmap_contains"))
+            {
+                bool res = bitmap_contains(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]), (size_t)atoi(argv[3]), strcmp(argv[4], "false"));
+                printf("%s\n", res ? "true" : "false");
+            }
+            else if(!strcmp(argv[0], "bitmap_any"))
+            {
+                bool res = bitmap_any(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]), (size_t)atoi(argv[3]));
+                printf("%s\n", res ? "true" : "false");
+            }
+            else if(!strcmp(argv[0], "bitmap_none"))
+            {
+                bool res = bitmap_none(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]), (size_t)atoi(argv[3]));
+                printf("%s\n", res ? "true" : "false");
+            }
+            else if(!strcmp(argv[0], "bitmap_all"))
+            {
+                bool res = bitmap_all(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]), (size_t)atoi(argv[3]));
+                printf("%s\n", res ? "true" : "false");
+            }
+            else if(!strcmp(argv[0], "bitmap_scan"))
+            {
+                size_t cnt = bitmap_scan(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]), (size_t)atoi(argv[3]), strcmp(argv[4], "false"));
+                printf("%zu\n", cnt);
+            }
+            else if(!strcmp(argv[0], "bitmap_scan_and_flip"))
+            {
+                size_t cnt = bitmap_scan_and_flip(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]), (size_t)atoi(argv[3]), strcmp(argv[4], "false"));
+                printf("%zu\n", cnt);
+            }
+            else if(!strcmp(argv[0], "bitmap_dump"))
+            {
+                bitmap_dump(main_bitmap[atoi(argv[1] + 2)]);
+            }
+            else if(!strcmp(argv[0], "bitmap_expand"))
+            {
+                main_bitmap[atoi(argv[1] + 2)] = bitmap_expand(main_bitmap[atoi(argv[1] + 2)], (size_t)atoi(argv[2]));
+            }
+        }
     }
+
+    free(main_list);
+    free(main_hash);
+    free(main_bitmap);
 
     return 0;
 }
 
-int string_split(char *str, char argv[10][30])
+int string_split(char *str, char argv[10][50])
 {
     int word = 0, index = 0;
     int len = strlen(str);

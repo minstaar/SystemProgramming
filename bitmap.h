@@ -43,4 +43,9 @@ size_t bitmap_file_size (const struct bitmap *);
 /* Debugging. */
 void bitmap_dump (const struct bitmap *);
 
+
+void dumpdata_bitmap (struct bitmap **, char *);
+
+struct bitmap * bitmap_expand (struct bitmap *, size_t);
+
 #endif /* bitmap.h */

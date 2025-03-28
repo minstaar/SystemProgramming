@@ -344,3 +344,38 @@ bitmap_dump (const struct bitmap *b)
   hex_dump (0, b->bits, byte_cnt (b->bit_cnt)/2, false);
 }
 
+
+void
+dumpdata_bitmap (struct bitmap **Bitmap, char *bitmap_name)
+{
+  int index = atoi (bitmap_name + 2);
+
+  ASSERT (Bitmap[index] != NULL);
+
+  if(bitmap_size(Bitmap[index]) == 0)
+    return;
+
+  for (size_t i = 0; i < bitmap_size(Bitmap[index]); i++)
+      printf ("%d", bitmap_test (Bitmap[index], i) ? 1 : 0);
+
+  printf ("\n");
+
+  return;
+}
+
+struct bitmap *
+bitmap_expand (struct bitmap *bitmap, size_t size)
+{
+  if (bitmap != NULL && size >= 0)
+    {
+      struct bitmap *res = bitmap_create (bitmap_size (bitmap) + size);
+
+      for (size_t i = 0; i < bitmap_size (bitmap); i++)
+        if (bitmap_test (bitmap, i))
+          bitmap_mark(res, i);
+      
+      return res;
+    }
+  
+  return NULL;
+}
