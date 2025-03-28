@@ -694,6 +694,25 @@ insert_elem_list (struct list **List, char *list_name, int position, int value)
 }
 
 void
+print_list (struct list **List, char *list_name, int position)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  struct list_elem *e;
+
+  if (position == -1)
+    e = list_back (List[index]);
+  else
+    e = list_begin (List[index]);
+  
+  printf ("%d\n", list_entry (e, struct list_item, elem)->data);
+
+  return;
+}
+
+void
 ordered_insert_elem_list (struct list **List, char *list_name, int value)
 {
   int index = atoi (list_name + 4);

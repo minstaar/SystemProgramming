@@ -15,9 +15,9 @@ int main()
 {
     int argc;
     char input[110], argv[10][50] = {};
-    struct list **main_list = (struct list **)calloc(15, sizeof(struct list *));
-    struct hash **main_hash = (struct hash **)calloc(15, sizeof(struct hash *));
-    struct bitmap **main_bitmap = (struct bitmap **)calloc(15, sizeof(struct bitmap *));
+    struct list **main_list = (struct list **)calloc(20, sizeof(struct list *));
+    struct hash **main_hash = (struct hash **)calloc(20, sizeof(struct hash *));
+    struct bitmap **main_bitmap = (struct bitmap **)calloc(20, sizeof(struct bitmap *));
 
     while (fgets(input, 110, stdin) != NULL)
     {
@@ -49,6 +49,15 @@ int main()
             {
                 insert_elem_list(main_list, argv[1], -1, atoi(argv[2]));
             }
+            else if (!strcmp(argv[0], "list_front"))
+            {
+                print_list(main_list, argv[1], 0);
+            }
+            else if (!strcmp(argv[0], "list_back"))
+            {
+                print_list(main_list, argv[1], -1);
+            }
+
             else if (!strcmp(argv[0], "list_insert"))
             {
                 insert_elem_list(main_list, argv[1], atoi(argv[2]), atoi(argv[3]));

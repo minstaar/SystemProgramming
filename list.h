@@ -176,6 +176,7 @@ void create_list (struct list **, char *);
 void delete_list (struct list **, char *);
 void dumpdata_list (struct list **, char *);
 void insert_elem_list (struct list **, char *, int, int);
+void print_list (struct list **, char *, int);
 void ordered_insert_elem_list (struct list **, char *, int);
 void remove_elem_list (struct list **, char *, int);
 void print_max_elem_list (struct list **, char *);
