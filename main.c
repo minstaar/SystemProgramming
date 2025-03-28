@@ -41,38 +41,38 @@ int main()
 
             else if (!strcmp(argv[0], "list_push_front"))
             {
-                insert_elem(main_list, argv[1], 0, atoi(argv[2]));
+                insert_elem_list(main_list, argv[1], 0, atoi(argv[2]));
             }
             else if (!strcmp(argv[0], "list_push_back"))
             {
-                insert_elem(main_list, argv[1], -1, atoi(argv[2]));
+                insert_elem_list(main_list, argv[1], -1, atoi(argv[2]));
             }
             else if (!strcmp(argv[0], "list_insert"))
             {
-                insert_elem(main_list, argv[1], atoi(argv[2]), atoi(argv[3]));
+                insert_elem_list(main_list, argv[1], atoi(argv[2]), atoi(argv[3]));
             }
             else if (!strcmp(argv[0], "list_insert_ordered"))
             {
-                ordered_insert_elem(main_list, argv[1], atoi(argv[2]));
+                ordered_insert_elem_list(main_list, argv[1], atoi(argv[2]));
             }
 
             else if (!strcmp(argv[0], "list_pop_front"))
             {
-                remove_elem(main_list, argv[1], 0);
+                remove_elem_list(main_list, argv[1], 0);
             }
             else if (!strcmp(argv[0], "list_pop_back"))
             {
-                remove_elem(main_list, argv[1], -1);
+                remove_elem_list(main_list, argv[1], -1);
             }
             else if (!strcmp(argv[0], "list_remove"))
             {
-                remove_elem(main_list, argv[1], atoi(argv[2]));
+                remove_elem_list(main_list, argv[1], atoi(argv[2]));
             }
 
             else if (!strcmp(argv[0], "list_max"))
-                print_max_elem(main_list, argv[1]);
+                print_max_elem_list(main_list, argv[1]);
             else if (!strcmp(argv[0], "list_min"))
-                print_min_elem(main_list, argv[1]);
+                print_min_elem_list(main_list, argv[1]);
             else if (!strcmp(argv[0], "list_size"))
                 printf("%zu\n", list_size(main_list[atoi(argv[1] + 4)]));
             else if (!strcmp(argv[0], "list_empty"))

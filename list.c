@@ -671,7 +671,7 @@ find_elem (struct list *list, int position)
 }
 
 void
-insert_elem (struct list **List, char *list_name, int position, int value)
+insert_elem_list (struct list **List, char *list_name, int position, int value)
 {
   int index = atoi (list_name + 4);
 
@@ -694,7 +694,7 @@ insert_elem (struct list **List, char *list_name, int position, int value)
 }
 
 void
-ordered_insert_elem (struct list **List, char *list_name, int value)
+ordered_insert_elem_list (struct list **List, char *list_name, int value)
 {
   int index = atoi (list_name + 4);
 
@@ -709,7 +709,7 @@ ordered_insert_elem (struct list **List, char *list_name, int value)
 }
 
 void
-remove_elem (struct list **List, char *list_name, int position)
+remove_elem_list (struct list **List, char *list_name, int position)
 {
   int index = atoi (list_name + 4);
 
@@ -729,7 +729,7 @@ remove_elem (struct list **List, char *list_name, int position)
 }
 
 void
-print_max_elem (struct list **List, char *list_name)
+print_max_elem_list (struct list **List, char *list_name)
 {
   int index = atoi (list_name + 4);
 
@@ -741,7 +741,7 @@ print_max_elem (struct list **List, char *list_name)
 }
 
 void
-print_min_elem (struct list **List, char *list_name)
+print_min_elem_list (struct list **List, char *list_name)
 {
   int index = atoi (list_name + 4);
 
