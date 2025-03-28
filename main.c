@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include "bitmap.h"
 #include "debug.h"
 #include "hash.h"
@@ -13,6 +14,8 @@ int string_split(char *str, char argv[10][50]);
 
 int main()
 {
+    srand (time (NULL));
+
     int argc;
     char input[110], argv[10][50] = {};
     struct list **main_list = (struct list **)calloc(20, sizeof(struct list *));

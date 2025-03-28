@@ -1,8 +1,7 @@
 #include "list.h"
 #include <assert.h>
 #include <stdio.h>
-/*For time() and rand() when shuffle list*/
-#include <time.h>
+/*For rand() when shuffle list*/
 #include <stdlib.h>
 #define ASSERT(CONDITION) assert(CONDITION)	
 
@@ -387,7 +386,7 @@ list_shuffle(struct list *list)
   for (int i = 0; i < size; i++, e = list_next (e))
     array_list[i] = e;
   
-  srand (time (NULL));
+  //srand (time (NULL));
 
   for(int i = size - 1; i > 0; i--)
     {

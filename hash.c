@@ -301,6 +301,19 @@ hash_int (int i)
   return hash_bytes (&i, sizeof i);
 }
 
+unsigned
+hash_int_2 (int i)
+{
+  unsigned h = i;
+  h ^= (h >> 8);
+  h *= 19997;
+  h ^= (h << 16);
+  h *= 797;
+  h ^= (h >> 7);
+  
+  return h;
+}
+
 /* Returns the bucket in H that E belongs in. */
 static struct list *
 find_bucket (struct hash *h, struct hash_elem *e) 
@@ -449,7 +462,7 @@ hash_less (const struct hash_elem *a, const struct hash_elem *b, void *aux)
 unsigned
 hash_func (const struct hash_elem *e, void *aux)
 {
-  return hash_int (e->data);
+  return hash_int_2 (e->data);
 }
 
 void
