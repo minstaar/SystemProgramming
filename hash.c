@@ -462,7 +462,7 @@ hash_less (const struct hash_elem *a, const struct hash_elem *b, void *aux)
 unsigned
 hash_func (const struct hash_elem *e, void *aux)
 {
-  return hash_int_2 (e->data);
+  return hash_int (e->data);
 }
 
 void
