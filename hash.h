@@ -26,6 +26,7 @@
 struct hash_elem 
   {
     struct list_elem list_elem;
+    int data;
   };
 
 /* Computes and returns the hash value for hash element E, given
@@ -87,5 +88,14 @@ bool hash_empty (struct hash *);
 unsigned hash_bytes (const void *, size_t);
 unsigned hash_string (const char *);
 unsigned hash_int (int);
+
+void create_hash (struct hash **, char *);
+void delete_hash (struct hash **, char *);
+void dumpdata_hash (struct hash **, char *);
+
+struct hash_elem *new_elem (int);
+void hash_destruct (struct hash_elem *, void *);
+
+void apply_hash (struct hash **, char *, int);
 
 #endif /* hash.h */

@@ -4,7 +4,8 @@ See hash.h for basic information. */
 
 #include "hash.h"
 #include <assert.h>	
-#include <stdlib.h>	
+#include <stdlib.h>
+#include <stdio.h>	
 
 #define ASSERT(CONDITION) assert(CONDITION)	
 
@@ -427,3 +428,109 @@ remove_elem (struct hash *h, struct hash_elem *e)
   list_remove (&e->list_elem);
 }
 
+
+/*Additional implement for processing*/
+
+struct hash_elem *
+new_elem (int value)
+{
+  struct hash_elem *e = (struct hash_elem *) calloc (1, sizeof (struct hash_elem));
+  e->data = value;
+
+  return e;
+}
+
+bool
+hash_less (const struct hash_elem *a, const struct hash_elem *b, void *aux)
+{
+  return a->data < b->data;
+}
+
+unsigned
+hash_func (const struct hash_elem *e, void *aux)
+{
+  return hash_int (e->data);
+}
+
+void
+hash_print (struct hash_elem *e, void *aux)
+{
+  printf("%d ", e->data);
+}
+
+void
+hash_square (struct hash_elem *e, void *aux)
+{
+  e->data = e->data * e->data;
+}
+
+void
+hash_triple (struct hash_elem *e, void *aux)
+{
+  e->data = e->data * e->data * e->data;
+}
+
+void
+hash_destruct (struct hash_elem *e, void *aux)
+{
+  free(e);
+  return;
+}
+
+void
+create_hash (struct hash **Hash, char *hash_name)
+{
+  int index = atoi (hash_name + 4);
+
+  ASSERT (Hash[index] == NULL);
+
+  struct hash *new_hash = (struct hash *) calloc (1, sizeof(struct hash));
+  hash_init (new_hash, hash_func, hash_less, NULL);
+
+  Hash[index] = new_hash;
+
+  return;
+}
+
+void
+delete_hash (struct hash **Hash, char *hash_name)
+{
+  int index = atoi (hash_name + 4);
+
+  ASSERT (Hash[index] != NULL);
+
+  hash_destroy (Hash[index], hash_destruct);
+
+  return;
+}
+
+void
+dumpdata_hash (struct hash **Hash, char *hash_name)
+{
+  int index = atoi (hash_name + 4);
+
+  ASSERT (Hash[index] != NULL);
+
+  if (Hash[index]->elem_cnt == 0)
+    return;
+
+  hash_apply (Hash[index], hash_print);
+  printf("\n");
+
+  return;
+}
+
+void
+apply_hash (struct hash **Hash, char *hash_name, int command)
+{
+  int index = atoi (hash_name + 4);
+
+  ASSERT (Hash[index] != NULL);
+
+  if (command == 0)
+    hash_apply (Hash[index], hash_square);
+  else
+    hash_apply (Hash[index], hash_triple);
+
+  return;
+}

@@ -16,6 +16,7 @@ int main()
     int argc;
     char input[110], argv[10][30] = {};
     struct list **main_list = (struct list **)calloc(15, sizeof(struct list *));
+    struct hash **main_hash = (struct hash **)calloc(15, sizeof(struct hash *));
 
     while (fgets(input, 110, stdin) != NULL)
     {
@@ -70,11 +71,17 @@ int main()
             }
 
             else if (!strcmp(argv[0], "list_max"))
+            {
                 print_max_elem_list(main_list, argv[1]);
+            }
             else if (!strcmp(argv[0], "list_min"))
+            {
                 print_min_elem_list(main_list, argv[1]);
+            }
             else if (!strcmp(argv[0], "list_size"))
+            {
                 printf("%zu\n", list_size(main_list[atoi(argv[1] + 4)]));
+            }
             else if (!strcmp(argv[0], "list_empty"))
             {
                 if (list_empty(main_list[atoi(argv[1] + 4)]))
@@ -84,13 +91,17 @@ int main()
             }
 
             else if (!strcmp(argv[0], "list_reverse"))
+            {
                 list_reverse(main_list[atoi(argv[1] + 4)]);
+            }
             else if (!strcmp(argv[0], "list_shuffle"))
             {
                 shuffle_list(main_list, argv[1]);
             }
             else if (!strcmp(argv[0], "list_sort"))
+            {
                 list_sort(main_list[atoi(argv[1] + 4)], less, NULL);
+            }
             else if (!strcmp(argv[0], "list_splice"))
             {
                 splice_list(main_list[atoi(argv[1] + 4)], main_list[atoi(argv[3] + 4)], atoi(argv[2]), atoi(argv[4]), atoi(argv[5]));
@@ -108,10 +119,60 @@ int main()
             }
         }
 
-        else if (!strcmp(argv[1], "bm"))
+        else if (!strncmp(argv[0], "hash", 4) || !strncmp(argv[1], "hash", 4))
         {
             if (!strcmp(argv[0], "create"))
             {
+                create_hash(main_hash, argv[2]);
+            }
+            else if (!strcmp(argv[0], "delete"))
+            {
+                delete_hash(main_hash, argv[1]);
+            }
+            else if (!strcmp(argv[0], "dumpdata"))
+            {
+                dumpdata_hash(main_hash, argv[1]);
+            }
+
+            else if (!strcmp(argv[0], "hash_insert"))
+            {
+                hash_insert(main_hash[atoi(argv[1] + 4)], new_elem(atoi(argv[2])));
+            }
+            else if (!strcmp(argv[0], "hash_delete"))
+            {
+                hash_delete(main_hash[atoi(argv[1] + 4)], new_elem(atoi(argv[2])));
+            }
+            else if (!strcmp(argv[0], "hash_empty"))
+            {
+                if (hash_empty(main_hash[atoi(argv[1] + 4)]))
+                    printf("true\n");
+                else
+                    printf("false\n");
+            }
+            else if (!strcmp(argv[0], "hash_size"))
+            {
+                printf("%zu\n", hash_size(main_hash[atoi(argv[1] + 4)]));
+            }
+            else if (!strcmp(argv[0], "hash_clear"))
+            {
+                hash_clear(main_hash[atoi(argv[1] + 4)], hash_destruct);
+            }
+
+            else if (!strcmp(argv[0], "hash_apply"))
+            {
+                if (!strcmp(argv[2], "square"))
+                    apply_hash(main_hash, argv[1], 0);
+                else
+                    apply_hash(main_hash, argv[1], 1);
+            }
+            else if (!strcmp(argv[0], "hash_find"))
+            {
+                if (hash_find(main_hash[atoi(argv[1] + 4)], new_elem(atoi(argv[2]))))
+                    printf("%d\n", atoi(argv[2]));
+            }
+            else if (!strcmp(argv[0], "hash_replace"))
+            {
+                hash_replace(main_hash[atoi(argv[1] + 4)], new_elem(atoi(argv[2])));
             }
         }
     }
