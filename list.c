@@ -1,5 +1,9 @@
 #include "list.h"
-#include <assert.h>	
+#include <assert.h>
+#include <stdio.h>
+/*For time() and rand() when shuffle list*/
+#include <time.h>
+#include <stdlib.h>
 #define ASSERT(CONDITION) assert(CONDITION)	
 
 /* Our doubly linked lists have two header elements: the "head"
@@ -330,6 +334,68 @@ swap (struct list_elem **a, struct list_elem **b)
   *b = t;
 }
 
+/* Swap two list ements A and B */
+void
+list_swap (struct list_elem *a, struct list_elem *b)
+{
+  ASSERT(a != NULL && b != NULL);
+
+  if(a == b)
+    return;
+  else if(a->next == b)
+    {
+      a->next = b->next;
+      a->next->prev = a;
+
+      b->prev = a->prev;
+      b->prev->next = b;
+
+      b->next = a;
+      a->prev = b;
+    }
+  else if(b->next == a)
+    list_swap(b, a);
+  else
+    {
+      struct list_elem *t;
+
+      t = a->prev;
+      a->prev = b->prev;
+      b->prev = t;
+
+      a->prev->next = a;
+      b->prev->next = b;
+
+      t = a->next;
+      a->next = b->next;
+      b->next = t;
+
+      a->next->prev = a;
+      b->next->prev = b;
+    }
+}
+
+void
+list_shuffle(struct list *list)
+{
+  int size = (int) list_size (list);
+  if (size < 2) return;
+
+  struct list_elem **array_list = (struct list_elem **) calloc (size, sizeof (struct list_elem *));
+  struct list_elem *e = list_begin (list);
+
+  for (int i = 0; i < size; i++, e = list_next (e))
+    array_list[i] = e;
+  
+  srand (time (NULL));
+
+  for(int i = size - 1; i > 0; i--)
+    {
+      int j = rand () % (i + 1);
+      list_swap(array_list[i], array_list[j]);
+    }
+}
+
 /* Reverses the order of LIST. */
 void
 list_reverse (struct list *list)
@@ -530,4 +596,200 @@ list_min (struct list *list, list_less_func *less, void *aux)
           min = e; 
     }
   return min;
+}
+
+/*Additional implement for processing*/
+
+/* For using list_less_func */
+bool
+less (const struct list_elem *a, const struct list_elem *b, void *aux)
+{
+  struct list_item *item_a = list_entry(a, struct list_item, elem);
+  struct list_item *item_b = list_entry(b, struct list_item, elem);
+  return item_a->data < item_b->data;
+}
+
+void
+create_list (struct list **List, char *list_name)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] == NULL);
+
+  struct list *new_list = (struct list *) calloc (1, sizeof(struct list));
+  list_init (new_list);
+
+  List[index] = new_list;
+
+  return;
+}
+
+void
+delete_list (struct list **List, char *list_name)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  while (!list_empty (List[index]))
+    {
+      struct list_elem *e = list_pop_front (List[index]);
+    }
+
+  free(List[index]);
+
+  return;
+}
+
+void
+dumpdata_list (struct list **List, char *list_name)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  if (list_empty (List[index]))
+    return;
+
+  struct list_elem *e;
+  
+  for (e = list_begin (List[index]); e != list_end (List[index]); e = list_next (e))
+      printf ("%d ", list_entry (e, struct list_item, elem)->data);
+  printf ("\n");
+  
+  return;
+}
+
+struct list_elem *
+find_elem (struct list *list, int position)
+{
+  struct list_elem *e = list_begin (list);
+  
+  for (int i = 0; i < position && e != list_end (list); i++, e = list_next (e));
+  
+  return e;
+}
+
+void
+insert_elem (struct list **List, char *list_name, int position, int value)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  struct list_elem *new_elem = (struct list_elem *) calloc (1, sizeof (struct list_elem));
+  list_entry (new_elem, struct list_item, elem)->data = value;
+
+  if (position == -1)
+    list_push_back (List[index], new_elem);
+  else if (position == 0)
+    list_push_front (List[index], new_elem);
+  else
+    {
+      struct list_elem *p = find_elem (List[index], position);
+      list_insert (p, new_elem);
+    }
+
+  return;
+}
+
+void
+ordered_insert_elem (struct list **List, char *list_name, int value)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  struct list_elem *new_elem = (struct list_elem *) calloc (1, sizeof (struct list_elem));
+  list_entry (new_elem, struct list_item, elem)->data = value;
+
+  list_insert_ordered (List[index], new_elem, less, NULL);
+
+  return;
+}
+
+void
+remove_elem (struct list **List, char *list_name, int position)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  if (position == -1)
+    list_pop_back (List[index]);
+  else if (position == 0)
+    list_pop_front (List[index]);
+  else
+    {
+      struct list_elem *p = find_elem (List[index], position);
+      list_remove (p);
+    }
+
+  return;
+}
+
+void
+print_max_elem (struct list **List, char *list_name)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  struct list_elem *e = list_max (List[index], less, NULL);
+  
+  printf ("%d\n", list_entry (e, struct list_item, elem)->data);
+}
+
+void
+print_min_elem (struct list **List, char *list_name)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  struct list_elem *e = list_min (List[index], less, NULL);
+  
+  printf ("%d\n", list_entry (e, struct list_item, elem)->data);
+}
+
+void
+shuffle_list (struct list **List, char *list_name)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  list_shuffle(List[index]);
+
+  return;
+}
+
+void
+splice_list (struct list *a, struct list *b, int index, int start, int end)
+{
+  ASSERT (a != NULL && b != NULL);
+  ASSERT (start < end);
+  
+  struct list_elem *before = find_elem (a, index);
+  struct list_elem *first = find_elem (b, start);
+  struct list_elem *last = find_elem (b, end);
+  
+  list_splice (before, first, last);
+
+  return;
+}
+
+void
+swap_list (struct list **List, char *list_name, int position1, int position2)
+{
+  int index = atoi (list_name + 4);
+
+  ASSERT (List[index] != NULL);
+
+  struct list_elem *e1 = find_elem (List[index], position1);
+  struct list_elem *e2 = find_elem (List[index], position2);
+
+  list_swap (e1, e2);
+
+  return;
 }

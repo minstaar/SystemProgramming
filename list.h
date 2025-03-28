@@ -96,6 +96,12 @@ struct list
     struct list_elem tail;      /* List tail. */
   };
 
+struct list_item
+  {
+    struct list_elem elem;
+    int data;
+  };
+
 /* Converts pointer to list element LIST_ELEM into a pointer to
    the structure that LIST_ELEM is embedded inside.  Supply the
    name of the outer structure STRUCT and the member name MEMBER
@@ -160,5 +166,22 @@ void list_unique (struct list *, struct list *duplicates,
 /* Max and min. */
 struct list_elem *list_max (struct list *, list_less_func *, void *aux);
 struct list_elem *list_min (struct list *, list_less_func *, void *aux);
+
+void list_swap (struct list_elem *, struct list_elem *);
+void list_shuffle(struct list *);
+
+bool less (const struct list_elem *, const struct list_elem *, void *aux);
+
+void create_list (struct list **, char *);
+void delete_list (struct list **, char *);
+void dumpdata_list (struct list **, char *);
+void insert_elem (struct list **, char *, int, int);
+void ordered_insert_elem (struct list **, char *, int);
+void remove_elem (struct list **, char *, int);
+void print_max_elem (struct list **, char *);
+void print_min_elem (struct list **, char *);
+void shuffle_list (struct list **, char *);
+void splice_list (struct list *, struct list *, int, int, int);
+void swap_list (struct list **, char *, int, int);
 
 #endif /* list.h */
